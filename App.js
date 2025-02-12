@@ -8,16 +8,17 @@ import {
   FlatList
 } from "react-native";
 
+import GoalItem from "./components/GoalItem";
+import GoalInput from './components/GoalInput'
+
 
 export default function App() {
-  const [inputText, setInputText] = useState("");
+  
   const [courseGoals, setCourseGoals] = useState([]);
 
-  function textChangeHandler(enteredText) {
-    setInputText(enteredText);
-  }
+  
 
-  function addGoalHandler() {
+  function addGoalHandler(inputText) {
     setCourseGoals((prev) => [...prev, {
       text:inputText,
       key:Math.random().toString()
@@ -25,19 +26,18 @@ export default function App() {
   }
   return (
     <View style={styles.appContainer}>
-      <View style={styles.inputContainer}>
-        <TextInput
-          placeholder="Search for the item"
-          style={styles.textInputContainer}
-          onChangeText={textChangeHandler}
-        ></TextInput>
-        <Button
-          title="Click"
-          accessibilityLabel="Learn more about by clicking it"
-          onPress={addGoalHandler}
+      <GoalInput onAddGoal={addGoalHandler}/>
+      <View style={styles.goalContainer}>
+        <FlatList
+          data={courseGoals}
+          renderItem={(itemList) => {
+            return (
+              <GoalItem Text={itemList.item.text}/>
+            );
+          }}
+          alwaysBounceVertical={false}
         />
       </View>
-      
     </View>
   );
 }
@@ -48,17 +48,10 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     paddingHorizontal: 15,
   },
-  inputContainer: {
-    flex: 1,
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 20,
-  },
-  textInputContainer: {
-    borderWidth: 1,
-    borderBlockColor: "black",
-    width: "80%",
+  goalContainer: {
+    flex: 5,
+    borderTopWidth: 1,
+    borderTopColor: "#cccccc",
   }
+  
 });
